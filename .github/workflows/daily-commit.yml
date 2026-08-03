@@ -1,0 +1,28 @@
+name: Daily Contribution
+
+on:
+  schedule:
+    # Runs at 12:00 UTC every day (afternoon local time)
+    - cron: '0 12 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions UI
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required for pushing commits back to the repo
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make contribution update
+        run: |
+          echo "Contribution on $(date)" >> contributions.txt
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "BabyNejii"
+          git config --global user.email "ivojd2006@gmail.com"
+          git add contributions.txt
+          git commit -m "Daily green square: $(date)"
+          git push
